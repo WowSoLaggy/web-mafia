@@ -1,0 +1,6 @@
+/* Пример стилей для public/styles.css */
+body {
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}

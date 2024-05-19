@@ -5,14 +5,22 @@ const Lobby = () => {
   const [gameId, setGameId] = useState('');
 
   const createGame = async () => {
-    const response = await axios.post('/api/game/create');
-    setGameId(response.data.gameId);
+    try {
+      const response = await axios.post('/api/game/create');
+      setGameId(response.data.gameId);
+    } catch (error) {
+      console.error('Error creating game:', error);
+    }
   };
 
   const joinGame = async (e) => {
     e.preventDefault();
-    const response = await axios.post('/api/game/join', { gameId });
-    console.log(response.data.message);
+    try {
+      const response = await axios.post('/api/game/join', { gameId });
+      console.log(response.data.message);
+    } catch (error) {
+      console.error('Error joining game:', error);
+    }
   };
 
   return (
