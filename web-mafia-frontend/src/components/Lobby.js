@@ -106,7 +106,7 @@ const Lobby = () => {
               onChange={handleNewGameSettingsChange}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group checkbox-group">
             <label>Allow Bots:</label>
             <input
               type="checkbox"
