@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Lobby = () => {
-  const [gameName, setGameName] = useState('');
   const [userName, setUserName] = useState('');
   const [players, setPlayers] = useState([]);
   const [games, setGames] = useState([]);
@@ -45,7 +44,6 @@ const Lobby = () => {
     }
     try {
       const response = await axios.post('/api/game/create', newGameSettings);
-      setGameName(response.data.gameName);
       navigate(`/game/${response.data.gameName}`);
     } catch (error) {
       console.error('Error creating game:', error);
@@ -53,8 +51,7 @@ const Lobby = () => {
     }
   };
 
-  const joinGame = async (e) => {
-    e.preventDefault();
+  const joinGame = async (gameName) => {
     try {
       const response = await axios.post('/api/game/join', { name: gameName, userName });
       console.log(response.data.message);
@@ -79,8 +76,8 @@ const Lobby = () => {
       <div className="create-game">
         <h2>Create New Game</h2>
         <form onSubmit={(e) => { e.preventDefault(); createGame(); }}>
-          <label>
-            Game Name:
+          <div className="form-group">
+            <label>Game Name:</label>
             <input
               type="text"
               name="name"
@@ -88,9 +85,9 @@ const Lobby = () => {
               onChange={handleNewGameSettingsChange}
               required
             />
-          </label>
-          <label>
-            Max Players:
+          </div>
+          <div className="form-group">
+            <label>Max Players:</label>
             <input
               type="number"
               name="maxPlayers"
@@ -99,27 +96,27 @@ const Lobby = () => {
               min="1"
               max="20"
             />
-          </label>
-          <label>
-            Password:
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
             <input
               type="text"
               name="password"
               value={newGameSettings.password}
               onChange={handleNewGameSettingsChange}
             />
-          </label>
-          <label>
-            Allow Bots:
+          </div>
+          <div className="form-group">
+            <label>Allow Bots:</label>
             <input
               type="checkbox"
               name="allowBots"
               checked={newGameSettings.allowBots}
               onChange={handleNewGameSettingsChange}
             />
-          </label>
-          <label>
-            Mode:
+          </div>
+          <div className="form-group">
+            <label>Mode:</label>
             <select
               name="mode"
               value={newGameSettings.mode}
@@ -128,7 +125,7 @@ const Lobby = () => {
               <option value="classic">Classic</option>
               {/* Add more game modes here */}
             </select>
-          </label>
+          </div>
           <button type="submit">Create Game</button>
         </form>
       </div>
@@ -147,23 +144,17 @@ const Lobby = () => {
           <ul>
             {games.map((game) => (
               <li key={game._id}>
-                Game Name: {game.name}, Status: {game.status}, Players: {game.players.length}/{game.maxPlayers}, Mode: {game.mode}
+                <div className="game-info">
+                  <span>Game Name: {game.name}</span>
+                  <span>Status: {game.status}</span>
+                  <span>Players: {game.players.length}/{game.maxPlayers}</span>
+                  <span>Mode: {game.mode}</span>
+                </div>
+                <button onClick={() => joinGame(game.name)}>Join</button>
               </li>
             ))}
           </ul>
         </div>
-      </div>
-      <div>
-        <form onSubmit={joinGame}>
-          <input
-            type="text"
-            value={gameName}
-            onChange={(e) => setGameName(e.target.value)}
-            placeholder="Enter Game Name"
-            required
-          />
-          <button type="submit">Join Game</button>
-        </form>
       </div>
     </div>
   );

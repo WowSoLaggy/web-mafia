@@ -30,16 +30,23 @@ button:hover {
 }
 
 form {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 20px;
 }
 
-input, select {
-  margin: 5px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  flex: 1;
+  text-align: left;
+}
+
+.form-group input, .form-group select {
+  flex: 2;
+  margin-left: 10px;
 }
 
 h1, h2 {
@@ -54,6 +61,9 @@ ul {
 ul li {
   padding: 8px 0;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .auth-container {
@@ -94,4 +104,9 @@ ul li {
 
 .players-list h2, .games-list h2 {
   margin-top: 0;
+}
+
+.game-info {
+  display: flex;
+  flex-direction: column;
 }
