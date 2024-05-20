@@ -76,25 +76,7 @@ const Lobby = () => {
   return (
     <div className="container">
       <h1>Welcome, {userName}</h1>
-      <div>
-        <h2>Players in Lobby</h2>
-        <ul>
-          {players.map((player) => (
-            <li key={player._id}>{player.name}</li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h2>Existing Games</h2>
-        <ul>
-          {games.map((game) => (
-            <li key={game._id}>
-              Game Name: {game.name}, Status: {game.status}, Players: {game.players.length}/{game.maxPlayers}, Mode: {game.mode}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
+      <div className="create-game">
         <h2>Create New Game</h2>
         <form onSubmit={(e) => { e.preventDefault(); createGame(); }}>
           <label>
@@ -149,6 +131,27 @@ const Lobby = () => {
           </label>
           <button type="submit">Create Game</button>
         </form>
+      </div>
+      <div className="lobby-content">
+        <div className="players-list">
+          <h2>Players in Lobby</h2>
+          <ul>
+            {players.map((player) => (
+              <li key={player._id}>{player.name}</li>
+            ))}
+            <li>{userName}</li>
+          </ul>
+        </div>
+        <div className="games-list">
+          <h2>Existing Games</h2>
+          <ul>
+            {games.map((game) => (
+              <li key={game._id}>
+                Game Name: {game.name}, Status: {game.status}, Players: {game.players.length}/{game.maxPlayers}, Mode: {game.mode}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       <div>
         <form onSubmit={joinGame}>

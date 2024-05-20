@@ -82,3 +82,16 @@ ul li {
   margin-left: auto;
   margin-right: auto;
 }
+
+.lobby-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.players-list, .games-list {
+  width: 45%;
+}
+
+.players-list h2, .games-list h2 {
+  margin-top: 0;
+}
