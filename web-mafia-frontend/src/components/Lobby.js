@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Lobby = () => {
   const [userName, setUserName] = useState('');
@@ -13,19 +14,27 @@ const Lobby = () => {
     allowBots: false,
     mode: 'classic'
   });
+  const { token, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const name = localStorage.getItem('userName');
-    if (name) {
-      setUserName(name);
+    if (user) {
+      setUserName(user.username);
     }
 
     const fetchPlayersAndGames = async () => {
       try {
         const [playersResponse, gamesResponse] = await Promise.all([
-          axios.get('/api/game/players'),
-          axios.get('/api/game/games')
+          axios.get('/api/game/players', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }),
+          axios.get('/api/game/games', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
         ]);
         setPlayers(playersResponse.data);
         setGames(gamesResponse.data);
@@ -34,8 +43,10 @@ const Lobby = () => {
       }
     };
 
-    fetchPlayersAndGames();
-  }, []);
+    if (token) {
+      fetchPlayersAndGames();
+    }
+  }, [token, user]);
 
   const createGame = async () => {
     if (!newGameSettings.name.trim()) {
@@ -43,7 +54,11 @@ const Lobby = () => {
       return;
     }
     try {
-      const response = await axios.post('/api/game/create', newGameSettings);
+      const response = await axios.post('/api/game/create', newGameSettings, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       navigate(`/game/${response.data.gameName}`);
     } catch (error) {
       console.error('Error creating game:', error);
@@ -53,7 +68,11 @@ const Lobby = () => {
 
   const joinGame = async (gameName) => {
     try {
-      const response = await axios.post('/api/game/join', { name: gameName, userName });
+      const response = await axios.post('/api/game/join', { name: gameName, userName }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log(response.data.message);
       navigate(`/game/${gameName}`);
     } catch (error) {

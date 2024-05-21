@@ -1,31 +1,46 @@
-import React, { useState } from 'react';
+// src/components/Auth.js
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Auth = () => {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const inputRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (name.trim()) {
-      localStorage.setItem('userName', name.trim());
+    const success = await login(username);
+    if (success) {
       navigate('/lobby');
+    } else {
+      setError('Login failed. Please try again.');
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Enter your name</h2>
+    <div>
+      <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-          required
-        />
-        <button type="submit">Enter</button>
+        <label>
+          Username:
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            ref={inputRef}
+            required
+          />
+        </label>
+        <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
