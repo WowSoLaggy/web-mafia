@@ -25,22 +25,23 @@ const Auth = () => {
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Login</h2>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
+            className="login-input"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             ref={inputRef}
             required
           />
-        </label>
-        <button type="submit">Login</button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+          <button type="submit" className="login-button">Log In</button>
+        </form>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
     </div>
   );
 };
